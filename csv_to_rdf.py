@@ -116,9 +116,11 @@ for index, row in csv_data.iterrows():
 
     oneNode(subject, row)
 
-
+#Remove nodes marked unknown 
 g.remove((None, None, URIRef("http://example.org/unknown")))
 
+# Writing the graph to a file on your system. Possible formats = turtle, n3, xml, nt.
+g.serialize(destination="recipe_triples.txt", format="turtle")
 
 print(g.serialize(format="turtle").decode())
 
