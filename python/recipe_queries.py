@@ -1,7 +1,4 @@
-from SPARQLWrapper import SPARQLWrapper, JSON, TURTLE
-from rdflib import Graph, Literal, Namespace, URIRef
-
-sparql = SPARQLWrapper("http://localhost:9999/blazegraph/sparql")
+from query_functions import createIngredientQuery, getRecipes
 
 prefixRecipe = "PREFIX recipe: <http://schema.org/Recipe/>"
 
@@ -15,7 +12,7 @@ prefixRecipe = "PREFIX recipe: <http://schema.org/Recipe/>"
 
 
 #SELECT recipes based on one ingredient (example: garlic)
-sparql.setQuery("" + prefixRecipe + 
+getRecipes("" + prefixRecipe + 
     """SELECT DISTINCT * WHERE {
         ?title recipe:recipeIngredient ?ingredient
         FILTER regex(?ingredient, "garlic", "i").
@@ -26,7 +23,7 @@ sparql.setQuery("" + prefixRecipe +
 
 
 #SELECT recipes based on either ingredients (example: chicken OR ham)
-sparql.setQuery("" + prefixRecipe + 
+getRecipes("" + prefixRecipe + 
     """SELECT DISTINCT * WHERE {
         ?title recipe:recipeIngredient ?ingredient
         FILTER (
@@ -38,7 +35,7 @@ sparql.setQuery("" + prefixRecipe +
 
 
 #SELECT recipes based on two ingredients (example: beef AND tomato)
-sparql.setQuery("" + prefixRecipe + 
+getRecipes("" + prefixRecipe + 
     """
     SELECT DISTINCT ?title ?ingredient1 ?ingredient2 WHERE 
     {   
@@ -54,7 +51,10 @@ sparql.setQuery("" + prefixRecipe +
 """)
 
 
-sparql.setQuery("" + prefixRecipe + 
+#Having an ingredient that does not match fails the query
+#FIX: Want to recipes that matches most of the users' ingredients
+#OPTIONAL: Having this as a feature because there may exist no ingredient with all of these ingredients
+getRecipes("" + prefixRecipe + 
     """SELECT DISTINCT ?title ?ingredient1 ?ingredient2 ?ingredient3 WHERE 
     {   
         {
@@ -71,34 +71,6 @@ sparql.setQuery("" + prefixRecipe +
         
 """)
 
-
-##
-# Function that creates a query for a set of ingredients
-def ingredientQuery(ingredientList):
-    queryString = "" + prefixRecipe + " SELECT DISTINCT ?title" 
-    
-    for i in range(0, len(ingredientList)):
-        queryString += " ?ingredient"+str(i)
-
-    queryString += " WHERE { {"
-
-    for i, ingredient in enumerate(ingredientList):
-        queryString += addIngredientToQuery(str(i), ingredient)
-
-    queryString += "} }"
-
-    return queryString
-
-##
-# Create a string for filtering for an ingredient 
-def addIngredientToQuery(i, ingredient):
-    return "?title recipe:recipeIngredient ?ingredient" + i + " FILTER CONTAINS(?ingredient" + i + ", \"" + ingredient + "\") . "
-
-
-sparql.setQuery(ingredientQuery(["beef", "tomato", "garlic"]))
-
-sparql.setReturnFormat(JSON)
-results = sparql.query().convert()
-
-for result in results["results"]["bindings"]:
-    print(result["title"]["value"])
+# Call functions that create a query based on the number of ingrediens
+ingrediensquery = createIngredientQuery(["beef", "tomato", "onion"])
+getRecipes(ingrediensquery)
