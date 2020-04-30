@@ -1,4 +1,4 @@
-from query_functions import createIngredientQuery, getRecipes
+from query_functions import createIngredientQuery, getRecipeTitle, getTitleAndInstructions
 
 prefixRecipe = "PREFIX recipe: <http://schema.org/Recipe/>"
 
@@ -12,7 +12,7 @@ prefixRecipe = "PREFIX recipe: <http://schema.org/Recipe/>"
 
 
 #SELECT recipes based on one ingredient (example: garlic)
-getRecipes("" + prefixRecipe + 
+getRecipeTitle("" + prefixRecipe + 
     """SELECT DISTINCT * WHERE {
         ?title recipe:recipeIngredient ?ingredient
         FILTER regex(?ingredient, "garlic", "i").
@@ -23,7 +23,7 @@ getRecipes("" + prefixRecipe +
 
 
 #SELECT recipes based on either ingredients (example: chicken OR ham)
-getRecipes("" + prefixRecipe + 
+getRecipeTitle("" + prefixRecipe + 
     """SELECT DISTINCT * WHERE {
         ?title recipe:recipeIngredient ?ingredient
         FILTER (
@@ -35,7 +35,7 @@ getRecipes("" + prefixRecipe +
 
 
 #SELECT recipes based on two ingredients (example: beef AND tomato)
-getRecipes("" + prefixRecipe + 
+getRecipeTitle("" + prefixRecipe + 
     """
     SELECT DISTINCT ?title ?ingredient1 ?ingredient2 WHERE 
     {   
@@ -54,7 +54,7 @@ getRecipes("" + prefixRecipe +
 #Having an ingredient that does not match fails the query
 #FIX: Want to recipes that matches most of the users' ingredients
 #OPTIONAL: Having this as a feature because there may exist no ingredient with all of these ingredients
-getRecipes("" + prefixRecipe + 
+getRecipeTitle("" + prefixRecipe + 
     """SELECT DISTINCT ?title ?ingredient1 ?ingredient2 ?ingredient3 WHERE 
     {   
         {
@@ -71,6 +71,28 @@ getRecipes("" + prefixRecipe +
         
 """)
 
-# Call functions that create a query based on the number of ingrediens
+#SELECT recipes with instructions based on an ingredient
+getTitleAndInstructions("" + prefixRecipe +
+    """SELECT DISTINCT ?title ?instructions ?ingredient1 WHERE 
+    {
+        {
+            ?title recipe:recipeInstructions ?instructions .
+            
+            ?title recipe:recipeIngredient ?ingredient1
+            FILTER CONTAINS(?ingredient1, "butter") .
+
+        }
+    }    
+
+""")
+
+# Create query for getting titles 
 ingrediensquery = createIngredientQuery(["beef", "tomato", "onion"])
-getRecipes(ingrediensquery)
+getRecipeTitle(ingrediensquery)
+
+
+# Create query for getting titles and recipe instructions 
+titleAndInstructionsQuery = createIngredientQuery(["butter", "garlic"])
+result = getTitleAndInstructions(titleAndInstructionsQuery)
+
+print(result[1])

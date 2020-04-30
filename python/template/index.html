@@ -3,12 +3,34 @@
     <head></head>
     <body>
         <h1>Recipe Finder</h1>
-        <form name="search" action="." method="post">
-            <label>1st Ingredient</label>
-            <input type="text" id="ingredient1" name="ingredient1"><br>
-            <label>2nd Ingredient</label>
-            <input type="text" id="ingredient2" name="ingredient2"><br>
-            <input type="submit" value="Submit">
+        <h4>Find recipes based on the ingredients</h4>
+        <form id="search" name="search" action="." method="post">
+             <div id="dynamicInput">
+                Ingredient 1<br><input type="text" name="ingredient1">
+           </div>
+           <input type="button" value="Add another text input" onClick="addIngredientField('dynamicInput');">
+           
+           <input type="submit" value="Submit">
+        
+        
         </form>
+
     </body>
+
+
+    <script>
+        var counter = 1;
+        var limit = 5;
+        function addIngredientField(divName) {
+            if (counter == limit)  {
+                alert("You have reached the limit of adding " + counter + " inputs");
+            }
+            else {
+                var newdiv = document.createElement('div');
+                newdiv.innerHTML = "Ingredient " + (counter + 1) + " <br><input type='text' name='ingredient" + (counter + 1) + "'>";
+                document.getElementById(divName).appendChild(newdiv);
+                counter++;
+            }
+        }
+    </script>
 </html>

@@ -1,8 +1,15 @@
 <html>
-    <head></head>
+    <head>
+        
+    </head>
     <body>
-        {% for item in resultList %}
-            <p>{{item}}</p>
+        {% for (title, instruction) in resultList %}
+            <ol>{{title}}
+                <br><br>
+                <ul>
+                    <li>{{instruction}}</li>
+                </ul>
+            </ol>
         {% endfor %}
     </body>
 </html>
