@@ -11,7 +11,7 @@ To run the program (local):
 ```java -server -Xmx4g -jar blazegraph.jar```
 2. Install necessary package to python 
 
-```pip install flask```` 
+```pip install flask```
 3. Execute csv_to_rdf.py to get the data in turtle-format, will return a file named recipe_triples.txt)
 
 ```python csv_to_rdf.py```
