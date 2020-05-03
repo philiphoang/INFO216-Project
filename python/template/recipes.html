@@ -3,13 +3,14 @@
         
     </head>
     <body>
-        {% for (title, instruction) in resultList %}
-            <ol>{{title}}
-                <br><br>
-                <ul>
-                    <li>{{instruction}}</li>
-                </ul>
+        {% for title in recipes %}
+            <ol>
+                <h3>{{title}}</h3>
+                {% for i in recipes[title] %}
+                    <li>{{i}}</li>
+                {% endfor %}
             </ol>
+            
         {% endfor %}
     </body>
 </html>

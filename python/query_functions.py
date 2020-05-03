@@ -35,10 +35,10 @@ def addIngredientToQuery(i, ingredient):
 def addInstructionsToQuery():
     return "?title recipe:recipeInstructions ?instructions ." 
 
-
 ##
 # Send the query to sparql and convert it to JSON format
 def parseQuery(query):
+    print()
     sparql.setQuery(query)
 
     sparql.setReturnFormat(JSON)
@@ -47,7 +47,6 @@ def parseQuery(query):
 ##
 # Collect the recipe titles from the query result
 def getRecipeTitle(query):
-    print()
     results = parseQuery(query)
 
     print(results)
@@ -63,7 +62,6 @@ def getRecipeTitle(query):
 ##
 # Get recipe titles with instructions 
 def getTitleAndInstructions(query):
-    print()
     results = parseQuery(query)
 
     print(results)
@@ -77,3 +75,68 @@ def getTitleAndInstructions(query):
         print(result["instructions"]["value"])
 
     return titleList, instructionList
+
+
+def getTitleAndInstructionsInDictionary(query):
+    results = parseQuery(query)
+
+    print(results)
+
+    d = {}
+    for result in results["results"]["bindings"]:
+        title = result["title"]["value"]
+        instructions = result["instructions"]["value"]
+
+        if (title not in d.keys()):
+            d[title] = instructions
+
+    return d
+
+
+##
+# Get all ingredients and instructions
+def getAllIngredientsAndInstructions(query):
+    results = parseQuery(query)
+
+    print(results)
+
+    recipeDict = {}
+    for result in results["results"]["bindings"]:
+        title = result["title"]["value"]
+        ingredient = result["ingredient"]["value"]
+        instruction = result["instruction"]["value"]
+
+        if (title not in recipeDict):
+            recipeDict[title] = []
+        
+        recipeDict.get(title).append(ingredient)
+        
+     
+        print(recipeDict.get(title))
+    
+    return recipeDict
+
+##
+# Match the chosen ingredients with all recipes to get all ingredients
+def findRecipes(ingredientList):
+    ingredientQuery = createIngredientQuery(ingredientList) #Create query 
+    titleAndInstructionDict = getTitleAndInstructionsInDictionary(ingredientQuery) #Get result of query
+
+    allRecipeDict = getAllIngredientsAndInstructions("" + prefixRecipe +
+        """SELECT DISTINCT ?title ?ingredient ?instruction WHERE
+        {
+            ?title recipe:recipeIngredient ?ingredient .
+            ?title recipe:recipeInstructions ?instruction
+        }    
+    """)
+
+    resultDict = {}
+
+    for title in allRecipeDict.keys():
+        if (title in titleAndInstructionDict):
+            resultDict[title] = allRecipeDict[title]
+
+            resultDict.get(title).insert(len(resultDict.get(title)),  titleAndInstructionDict[title])
+
+    print(resultDict)
+    return resultDict

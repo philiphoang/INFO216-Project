@@ -75,7 +75,7 @@ Preheat oven to 350 degrees. Turn into a lightly greased 9-inch square baking di
 
 ex:Asparagus_Stir-Fried a recipe:name ;
     recipe:recipeIngredient "1 clove garlic minced",
-        "1 pound sparagus",
+        "1 pound asparagus",
         "1 tsp fresh ginger minced",
         "1/2 tsp cornstarch",
         "1/4 cup chicken stock",
@@ -124,7 +124,7 @@ ex:Bake_Trout a recipe:name ;
         "2 slices bacon for each",
         "2 tbsp flour",
         "3 tbsp margerine" ;
-    recipe:recipeInstructions "unknown" .
+    recipe:recipeInstructions "Preheat the oven to 180˚C/Gas 4. Wash and dry the trout inside and out and season the cavity with salt and pepper and a few parsley sprigs. Wrap each fish with two rashers of bacon and secure with a cocktail stick. Lay them side by side in a shallow ovenproof dish. Bake for about 20 minutes until the bacon is crisp and the trout flesh cooked and flaky. Serve sprinkled with chopped fresh parsley." .
 
 ex:Baked_Green_Beans a recipe:name ;
     recipe:recipeIngredient "1 clove garlic minced",
@@ -134,7 +134,7 @@ ex:Baked_Green_Beans a recipe:name ;
         "1/2 tsp dried tarragon",
         "1/4 tsp pepper",
         "1/4 tsp salt" ;
-    recipe:recipeInstructions "unknown" .
+    recipe:recipeInstructions "Preheat oven to 400 degrees F (200 degrees C). Pat green beans dry with paper towels if necessary; spread onto a jellyroll pan. Drizzle with olive oil and sprinkle with salt and pepper. Use your fingers to coat beans evenly with olive oil and spread them out so they don't overlap. Roast in the preheated oven until beans are slightly shriveled and have brown spots 20 to 25 minutes." .
 
 ex:Baked_Zucchini_with_Mushrooms a recipe:name ;
     recipe:recipeIngredient "1 1/2 cups chicken broth",
@@ -284,7 +284,7 @@ ex:Blackberry_Nectarine_Pie a recipe:name ;
         "2 Tbsp cornstarch",
         "2 cups blackberries",
         "3/4 cups sugar" ;
-    recipe:recipeInstructions "unknown" .
+    recipe:recipeInstructions "In a small saucepan mix cornstarch and apple juice concentrate until smooth. Bring to a boil. Add 1/2 cup blackberries; cook and stir 2 minutes or until thickened. Remove from heat. In a large bowl toss nectarines with remaining blackberries; transfer to crust. Pour apple juice mixture over fruit (crust will be full). Refrigerate covered 8 hours or overnight. If desired serve with whipped topping." .
 
 ex:Blue_Cheese_Dressing a recipe:name ;
     recipe:recipeIngredient "1 1/2 ounces white sauterne wine",
@@ -368,7 +368,7 @@ ex:Broccoli_Curry_Salad a recipe:name ;
         "1/2 cup raisins",
         "2 or 3 stalks of celery",
         "4 cups broccoli cut into small pieces" ;
-    recipe:recipeInstructions "unknown" .
+    recipe:recipeInstructions "Place bacon in a large deep skillet. Cook over medium high heat until evenly brown. Drain crumble and set aside. In a large bowl combine the bacon broccoli onion dried fruit and sunflower seeds. Whisk together the mayonnaise curry powder vinegar and sugar. Pour dressing over salad; toss to coat and marinate over night." .
 
 ex:Broccoli_Salad a recipe:name ;
     recipe:recipeIngredient "1 cup mayonnaise",
@@ -1019,7 +1019,7 @@ ex:Egg_Roll_Filling a recipe:name ;
         "3 cups cabbage finely shredded",
         "3 tbsp oil",
         "3 tsp water" ;
-    recipe:recipeInstructions "unknown" .
+    recipe:recipeInstructions "Mix the ingredients together. Put the mixed ingredients on egg roll wrappers. Roll and use water to glue it together. Heat up oil to and fry the egg rolls until golden brown." .
 
 ex:Egg_Roll_Wrappers a recipe:name ;
     recipe:recipeIngredient "1 cup flour",
@@ -1300,12 +1300,9 @@ ex:Hungry_Bear_Cheese_Cake a recipe:name ;
         "1 tsp vanilla",
         "1/2 pint cottage cheese",
         "1/2 pint sour cream",
-        "1/3 cup butter melted",
         "1/3 cup melted butter",
         "1/3 cup sugar",
-        "1/4 cup wheat germ (optional)",
         "1/4 cup wheat germ optional",
-        "1/4 tsp salt",
         "1/4/12 tsp salt",
         "1/8 tsp salt",
         "2 tbsp flour",
@@ -1313,10 +1310,8 @@ ex:Hungry_Bear_Cheese_Cake a recipe:name ;
         "2/3 cup sugar",
         "3 tbsp sugar",
         "4 eggs",
-        "5-Jan pint sour cream",
         "8 ounces cream cheese" ;
-    recipe:recipeInstructions "Combine first 5 ingredients to make crust.  Save 1/4 cup for top.  Press remaining crumbs evenly over bottom and about 2 inches up sides of a 9 inch spring form pan.  Prepare filling:  beat cream cheese and cottage cheese until smooth.  Add eggs one at a time bating well. Blend in lemon juice and vanilla.  Mix sugar flour and salt.  Add to cheese mixture.  Pour into crust.  Bake at 350 degrees until set about 35 to 40 minutes.  Combine topping ingredients (sour cream sugar vanilla and salt).  Spread evenly over hot cheese cake.  Return to oven until cream sets about 5 minutes.  Cool in pan on rack.  Sprinkle reserved crumbs around edge of cake.",
-        "unknown" .
+    recipe:recipeInstructions "Combine first 5 ingredients to make crust.  Save 1/4 cup for top.  Press remaining crumbs evenly over bottom and about 2 inches up sides of a 9 inch spring form pan.  Prepare filling:  beat cream cheese and cottage cheese until smooth.  Add eggs one at a time bating well. Blend in lemon juice and vanilla.  Mix sugar flour and salt.  Add to cheese mixture.  Pour into crust.  Bake at 350 degrees until set about 35 to 40 minutes.  Combine topping ingredients (sour cream sugar vanilla and salt).  Spread evenly over hot cheese cake.  Return to oven until cream sets about 5 minutes.  Cool in pan on rack.  Sprinkle reserved crumbs around edge of cake." .
 
 ex:Hungry_Bear_Vegetable_Soup a recipe:name ;
     recipe:recipeIngredient "1 large can stewed tomatoes crushed",
@@ -1480,7 +1475,7 @@ ex:Louies_Linguini_with_Clam_Sauce a recipe:name ;
         "1/4 cup white wine with clam juice and enough half-and-half to make 2 cups of liquid",
         "2 cans chopped clams",
         "2 tbsp flour" ;
-    recipe:recipeInstructions "unknown" .
+    recipe:recipeInstructions "If using fresh clams open each one and cut out the flesh. Discard the shells then wash the clams under cold running water to remove all traces of sand. Add the salt to large pot of water and bring to a boil. Cook the linguini according to the directions on the package. Meanwhile heat the butter and olive oil in small saucepan. Add the garlic onion parsley oregano and pepper. Cook about 3 minutes stirring frequently. Add the wine and clams. Cover and simmer over low heat for 10 – 12 minutes. Stir in the cream heat for a minute or so then remove from heat. (Do NOT allow to boil) When the linguini is done drain and transfer to a large serving bowl. Pour the clam sauce over it and toss to coat all the pasta. Top with the parmesan cheese or serve the cheese on the side so people can add it to taste." .
 
 ex:Maryland_Fried_Chicken a recipe:name ;
     recipe:recipeIngredient "1 cup milk",
@@ -1518,7 +1513,7 @@ ex:Mexican_Meatball_Soup a recipe:name ;
         "1/4 cup onion finely chopped",
         "2 cups tomatoes crushed",
         "4 cups chicken or beef broth" ;
-    recipe:recipeInstructions "Mix first 8 ingredients.  Shape into 1' balls.  Brown in small amount of oil.  Put remaining ingredients in a large pot.  Heat to boiling.  Add meatballs.  Cover and simmer 15 minutes.  Salt and pepper to taste.  Add rice and simmer 15 minutes.  Salt and pepper to taste.  Add rice and simmer 15 minutes." .
+    recipe:recipeInstructions "Mix first 8 ingredients.  Shape into 1' balls.  Brown in small amount of oil.  Put remaining ingredients in a large pot.  Heat to boiling.  Add meatballs.  Cover and simmer 15 minutes.  Salt and pepper to taste.  Add rice and simmer 15 minutes.  Salt and pepper to taste." .
 
 ex:Minestrone_Soup a recipe:name ;
     recipe:recipeIngredient "1 can kidney beans",
@@ -2488,20 +2483,15 @@ ex:Tortilla_Soup a recipe:name ;
 ex:Tulelake_Potato_Casserole a recipe:name ;
     recipe:recipeIngredient "1 1/2 cups sour cream",
         "1 can cream of chcken soup",
-        "1 can cream of chicken soup",
         "1 teaspoon salt",
-        "1 teaspoon teaspoon salt",
         "1/2 teaspoon pepper",
         "1/4 cup butter melted",
         "1/4 cup melted butter",
         "2 cups cheddar cheese grated",
         "2 cups cornflakes crushed",
         "2 packages frozen hashbrown potatoes thawed",
-        "2 pounds frozen hashbrowns thawed",
-        "3 tablespoons dried onion or 1/2 cup fresh",
         "3 tablespoons dried onions or 1/2 cup fresh" ;
-    recipe:recipeInstructions "Thaw potatoes. Mix first 8 ingredients. Put in 9 x 13 casserole dish. Top with cornflakes and melted butter mixture. Bake at 350 degrees for 50 minutes. Can be prepared ahead and frozen.",
-        "unknown" .
+    recipe:recipeInstructions "Thaw potatoes. Mix first 8 ingredients. Put in 9 x 13 casserole dish. Top with cornflakes and melted butter mixture. Bake at 350 degrees for 50 minutes. Can be prepared ahead and frozen." .
 
 ex:Turkey_Tenderloin_Supreme a recipe:name ;
     recipe:recipeIngredient "1 can cream of chicken soup",
@@ -2550,7 +2540,7 @@ ex:Veal_Parmigan a recipe:name ;
         "3 tbsp oil",
         "32 ounces tomatoes canned",
         "8 ounces tomato sauce" ;
-    recipe:recipeInstructions "Combine first 8 ingredients and simmer for 1 hour over medium-low heat. Dip Veal in egg and then in crumbs mixed with half cup of parmesan. Brown lightly in hot oil. Place in single layer in large baking dish. Pour 2/3 cup of sauce over meat and bake at 350 degrees for 30 minutes. Place a slice of mozzarella on each meat slice. SPrinkle with remaining parmesan. return to oven for about 15 minutes." .
+    recipe:recipeInstructions "Combine first 8 ingredients and simmer for 1 hour over medium-low heat. Dip Veal in egg and then in crumbs mixed with half cup of parmesan. Brown lightly in hot oil. Place in single layer in large baking dish. Pour 2/3 cup of sauce over meat and bake at 350 degrees for 30 minutes. Place a slice of mozzarella on each meat slice. Sprinkle with remaining parmesan. return to oven for about 15 minutes." .
 
 ex:Veal_Scallopini a recipe:name ;
     recipe:recipeIngredient "1 can sliced mushrooms",

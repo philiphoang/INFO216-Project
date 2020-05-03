@@ -1,15 +1,6 @@
-from query_functions import createIngredientQuery, getRecipeTitle, getTitleAndInstructions
+from query_functions import createIngredientQuery, getRecipeTitle, getTitleAndInstructions, getAllIngredientsAndInstructions, findRecipes, getTitleAndInstructionsInDictionary
 
 prefixRecipe = "PREFIX recipe: <http://schema.org/Recipe/>"
-
-#In Blazegraph:
-# prefix recipe: <http://schema.org/Recipe/> 
-    
-#     SELECT DISTINCT * WHERE {
-#         ?x recipe:recipeIngredient ?ingredient
-#         FILTER regex(?ingredient, "garlic", "i").
-# }
-
 
 #SELECT recipes based on one ingredient (example: garlic)
 getRecipeTitle("" + prefixRecipe + 
@@ -20,7 +11,6 @@ getRecipeTitle("" + prefixRecipe +
 """)
 
 #Can also use CONTAINS(?o, "regex")
-
 
 #SELECT recipes based on either ingredients (example: chicken OR ham)
 getRecipeTitle("" + prefixRecipe + 
@@ -49,7 +39,6 @@ getRecipeTitle("" + prefixRecipe +
     }
         
 """)
-
 
 #Having an ingredient that does not match fails the query
 #FIX: Want to recipes that matches most of the users' ingredients
@@ -86,6 +75,16 @@ getTitleAndInstructions("" + prefixRecipe +
 
 """)
 
+
+# Query for getting all ingredients and instructions
+getAllIngredientsAndInstructions("" + prefixRecipe +
+    """SELECT DISTINCT ?title ?ingredient ?instruction WHERE
+    {
+        ?title recipe:recipeIngredient ?ingredient .
+        ?title recipe:recipeInstructions ?instruction
+    }    
+""")
+
 # Create query for getting titles 
 ingrediensquery = createIngredientQuery(["beef", "tomato", "onion"])
 getRecipeTitle(ingrediensquery)
@@ -95,4 +94,8 @@ getRecipeTitle(ingrediensquery)
 titleAndInstructionsQuery = createIngredientQuery(["butter", "garlic"])
 result = getTitleAndInstructions(titleAndInstructionsQuery)
 
-print(result[1])
+
+
+# Find recipes with matching ingredients
+findRecipes(["beef", "tomato", "onion"])
+

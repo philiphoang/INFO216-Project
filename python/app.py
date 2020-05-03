@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from query_functions import getRecipeTitle, createIngredientQuery, getTitleAndInstructions
+from query_functions import getRecipeTitle, createIngredientQuery, getTitleAndInstructions, findRecipes
 
 app = Flask(__name__, template_folder='template')
 
@@ -25,15 +25,10 @@ def getvalue():
     if ("ingredient5" in request.form):
         ingredientList.append(request.form["ingredient5"])
     
-    ingredientQuery = createIngredientQuery(ingredientList)
-    resultList = getTitleAndInstructions(ingredientQuery)
-    titles = list(dict.fromkeys(resultList[0]))
-    
-    instructions = list(dict.fromkeys(resultList[1]))
+    recipes = findRecipes(ingredientList)
 
-    resultList = zip(titles, instructions)
 
-    return render_template("recipes.html", resultList = resultList)
+    return render_template("recipes.html", recipes = recipes)
 
 
 if __name__ == '__main__':
