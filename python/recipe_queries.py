@@ -1,4 +1,4 @@
-from query_functions import createIngredientQuery, getRecipeTitle, getTitleAndInstructions, getAllIngredientsAndInstructions, findRecipes, getTitleAndInstructionsInDictionary
+from query_functions import createIngredientQuery, getRecipeTitle, getTitleAndInstructions, getAllIngredientsAndInstructions, findRecipes, getTitleAndInstructionsInDictionary, insertRecipe, createInsertRecipeQuery
 
 prefixRecipe = "PREFIX recipe: <http://schema.org/Recipe/>"
 
@@ -77,14 +77,35 @@ getTitleAndInstructions("" + prefixRecipe +
 
 
 # Query for getting all ingredients and instructions
-getAllIngredientsAndInstructions("" + prefixRecipe +
-    """SELECT DISTINCT ?title ?ingredient ?instruction WHERE
-    {
-        ?title recipe:recipeIngredient ?ingredient .
-        ?title recipe:recipeInstructions ?instruction
-    }    
-""")
+# getAllIngredientsAndInstructions("" + prefixRecipe +
+#     """SELECT DISTINCT ?title ?ingredient ?instruction WHERE
+#     {
+#         ?title recipe:recipeIngredient ?ingredient .
+#         ?title recipe:recipeInstructions ?instruction
+#     }    
+# """)
 
+
+
+#Query for inserting a recipe 
+insertRecipe("""PREFIX recipe: <http://schema.org/Recipe/>
+PREFIX ex: <http://example.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+
+INSERT DATA {
+	ex:Dolmio_Lasagne rdf:type recipe:name . 
+  	ex:Dolmio_Lasagne recipe:recipeIngredient "1 Dolmio Bechamel sauce".
+  	ex:Dolmio_Lasagne recipe:recipeIngredient "1 Dolmio Lasagne sauce".
+  	ex:Dolmio_Lasagne recipe:recipeIngredient "400 gram minced meat".
+  ex:Dolmio_Lasagne recipe:recipeIngredient "100 gram grated cheese".
+  ex:Dolmio_Lasagne recipe:recipeIngredient "9 lasagne pasta plates".
+  ex:Dolmio_Lasagne recipe:recipeIngredient "2 tbsp butter".
+  
+  ex:Dolmio_Lasagne recipe:recipeInstructions "Heat butter in a pan. Brown the meat. Pour Dolmio Lasagne sauce and reduce on low heat for 10 min. Start with Dolmio Bechamel and end with it. Layer the sauce and plate. Put cheese on top. Put in oven for 30 min with 200 celsius degree.".
+}""")
+
+
+# USING FUNCTIONS FOR CREATING QUERIES
 # Create query for getting titles 
 ingrediensquery = createIngredientQuery(["beef", "tomato", "onion"])
 getRecipeTitle(ingrediensquery)
@@ -94,8 +115,19 @@ getRecipeTitle(ingrediensquery)
 titleAndInstructionsQuery = createIngredientQuery(["butter", "garlic"])
 result = getTitleAndInstructions(titleAndInstructionsQuery)
 
-
-
 # Find recipes with matching ingredients
 findRecipes(["beef", "tomato", "onion"])
 
+# Insert new recipe 
+title = "Basic Pizza"
+ingredientList = ["1 box chopped tomatoes", "1 pizza dough", "100 gram grated cheese"]
+instruction = "Roll out pizza dough. Spread chopped tomatoes. Put cheese on top. Put pizza in oven for 15 min with 200 degree celsius."
+createInsertRecipeQuery(title, ingredientList, instruction)
+
+title = "Glass Milk"
+ingredientList = ["1 empty glass, 3 dl milk"]
+instruction = "Pour glass in milk. Drink"
+query = createInsertRecipeQuery(title, ingredientList, instruction)
+insertRecipe(query)
+
+findRecipes(["glass"])

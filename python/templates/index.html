@@ -1,20 +1,24 @@
 
 <html>
-    <head></head>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style.css') }}">
+    </head>
     <body>
-        <h1>Recipe Finder</h1>
-        <h4>Find recipes based on the ingredients</h4>
+        <nav>
+            <a href="{{ url_for('index') }}">Find recipe</a>
+            <a href="{{ url_for('add_recipe') }}">Add recipe</a>
+        </nav>
+
+        <h1>Find recipes</h1>
+        <h4>Find recipes based on your ingredients!</h4>
         <form id="search" name="search" action="." method="post">
              <div id="dynamicInput">
                 Ingredient 1<br><input type="text" name="ingredient1">
            </div>
            <input type="button" value="Add another ingredient" onClick="addIngredientField('dynamicInput');">
-           
-           <input type="submit" value="Submit">
-        
-        
+           <br><br>
+           <input type="submit" value="Search for recipes">
         </form>
-
     </body>
 
 

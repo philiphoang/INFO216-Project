@@ -1,0 +1,47 @@
+
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style.css') }}">
+    </head>
+    <body>
+        <nav>
+            <a href="{{ url_for('index') }}">Find recipe</a>
+            <a href="{{ url_for('add_recipe') }}">Add recipe</a>
+        </nav>
+
+        <h1>Add Recipe</h1>
+        <h4>Add your own recipe by typing in title, ingredients and instructions!</h4>
+        <form id="add" name="addvalue" action="/add_recipe" method="post">
+            Recipe Title<br>
+            <input type="text" name="title">
+            <br><br>
+            <div id="dynamicInput">
+                Ingredient 1 ("amount" "unit (optional)" "ingredient")<br><input type="text" name="ingredient1">
+            </div>
+           
+            <input type="button" value="Add another ingredient" onClick="addIngredientField('dynamicInput');"><br><br>
+            Instructions<br>
+            <textarea name="instructions" rows="4" cols="50"></textarea>
+            <br><br>
+            <input type="submit" value="Submit recipe">
+
+        </form>
+    </body>
+
+
+    <script>
+        var counter = 1;
+        var limit = 5;
+        function addIngredientField(divName) {
+            if (counter == limit)  {
+                alert("You have reached the limit of adding " + counter + " inputs");
+            }
+            else {
+                var newdiv = document.createElement('div');
+                newdiv.innerHTML = "Ingredient " + (counter + 1) + " <br><input type='text' name='ingredient" + (counter + 1) + "'>";
+                document.getElementById(divName).appendChild(newdiv);
+                counter++;
+            }
+        }
+    </script>
+</html>

@@ -1,8 +1,12 @@
-from SPARQLWrapper import SPARQLWrapper, JSON, TURTLE
+from SPARQLWrapper import SPARQLWrapper, JSON, TURTLE, POST 
 from rdflib import Graph, Literal, Namespace, URIRef
 
+## Prefixes
 prefixRecipe = "PREFIX recipe: <http://schema.org/Recipe/>"
+prefixEx = "PREFIX ex: <http://example.org/>"
+prefixRdf = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
 
+## Connection to Blazegraph
 sparql = SPARQLWrapper("http://localhost:9999/blazegraph/sparql")
 
 ##
@@ -76,7 +80,8 @@ def getTitleAndInstructions(query):
 
     return titleList, instructionList
 
-
+##
+# Get a dictionary containing title and instructions
 def getTitleAndInstructionsInDictionary(query):
     results = parseQuery(query)
 
@@ -98,8 +103,6 @@ def getTitleAndInstructionsInDictionary(query):
 def getAllIngredientsAndInstructions(query):
     results = parseQuery(query)
 
-    print(results)
-
     recipeDict = {}
     for result in results["results"]["bindings"]:
         title = result["title"]["value"]
@@ -110,10 +113,7 @@ def getAllIngredientsAndInstructions(query):
             recipeDict[title] = []
         
         recipeDict.get(title).append(ingredient)
-        
-     
-        print(recipeDict.get(title))
-    
+            
     return recipeDict
 
 ##
@@ -140,3 +140,28 @@ def findRecipes(ingredientList):
 
     print(resultDict)
     return resultDict
+
+def createInsertRecipeQuery(title, ingredientList, instructions):
+    newTitle = title.replace(' ', '_')
+    exTitle = "ex:" + newTitle + " "
+
+    query = "" + prefixRecipe + " " + prefixRdf + " " + prefixEx + " INSERT DATA {"
+    query += exTitle + "rdf:type recipe:name . "
+
+    for ingredient in ingredientList:
+        query += exTitle + "recipe:recipeIngredient \"" + ingredient + "\" . "
+    
+    query += exTitle + "recipe:recipeInstructions \"" + instructions + "\" . }"
+    
+    print(query)
+    return query
+
+
+##
+# Insert recipe 
+def insertRecipe(query):
+    sparql.setMethod(POST)
+    sparql.setQuery(query)
+
+    results = sparql.query()
+    print(results.response.read())
