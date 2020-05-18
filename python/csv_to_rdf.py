@@ -106,6 +106,10 @@ def threeNodes(subject, row):
 for index, row in csv_data.iterrows():
     subject = row["Title"]
 
+    #g.add((URIRef(ex + subject), URIRef(ex + "title"), Literal(subject)))
+
+    #g.add((URIRef(ex + subject), URIRef(ex + "directions"), Literal(row["Directions"])))
+
     g.add((URIRef(ex + subject), RDF.type, Recipe.name))
 
     g.add((URIRef(ex + subject), Recipe.recipeInstructions, Literal(row["Directions"])))
