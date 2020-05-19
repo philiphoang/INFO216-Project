@@ -2,7 +2,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON, TURTLE, POST
 from rdflib import Graph, Literal, Namespace, URIRef
 
 ## Prefixes
-prefixRecipe = "PREFIX recipe: <http://schema.org/Recipe/>"
+prefixFo = "PREFIX fo: <https://bbc.co.uk/ontologies/fo/>"
 prefixEx = "PREFIX ex: <http://example.org/>"
 prefixRdf = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
 
@@ -12,32 +12,28 @@ sparql = SPARQLWrapper("http://localhost:9999/blazegraph/sparql")
 ##
 # Function for creating queries for a set of ingredients
 def createIngredientQuery(ingredientList):
-    queryString = "" + prefixRecipe + " SELECT DISTINCT ?title ?instructions" 
+    queryString = "" + prefixEx + " " + prefixFo + " SELECT DISTINCT ?title ?instruction" 
     
     for i in range(0, len(ingredientList)):
-        queryString += " ?ingredient"+str(i)
+        queryString += " ?i"+str(i)
 
-    queryString += " WHERE { {"
+    queryString += " WHERE {"
     
-    queryString += addInstructionsToQuery()
+    queryString += "?title fo:instruction ?instruction ."
 
     for i, ingredient in enumerate(ingredientList):
         queryString += addIngredientToQuery(str(i), ingredient)
 
-    queryString += "} }"
+    queryString += "}"
 
     return queryString
 
 ##
 # Create a string for filtering for an ingredient 
 def addIngredientToQuery(i, ingredient):
-    return "?title recipe:recipeIngredient ?ingredient" + i + " FILTER CONTAINS(?ingredient" + i + ", \"" + ingredient + "\") . "
-
-
-##
-# Create a query for getting instructions 
-def addInstructionsToQuery():
-    return "?title recipe:recipeInstructions ?instructions ." 
+    newIngredient = ingredient.replace(' ', '_')
+    return "?title fo:ingredients ?ingredient" + i + " BIND (ex:" + newIngredient + " as ?i" + i + ") ?ingredient" + i + " fo:food ?i" + i + " ."
+    
 
 ##
 # Send the query to sparql and convert it to JSON format
@@ -60,7 +56,6 @@ def getRecipeTitle(query):
         resultList.append(result["title"]["value"])
         print(result["title"]["value"])
 
-
     return resultList
 
 ##
@@ -75,8 +70,8 @@ def getTitleAndInstructions(query):
     for result in results["results"]["bindings"]:
         titleList.append(result["title"]["value"])
         print(result["title"]["value"])
-        instructionList.append(result["instructions"]["value"])
-        print(result["instructions"]["value"])
+        instructionList.append(result["instruction"]["value"])
+        print(result["instruction"]["value"])
 
     return titleList, instructionList
 
@@ -90,10 +85,10 @@ def getTitleAndInstructionsInDictionary(query):
     d = {}
     for result in results["results"]["bindings"]:
         title = result["title"]["value"]
-        instructions = result["instructions"]["value"]
+        instruction = result["instruction"]["value"]
 
         if (title not in d.keys()):
-            d[title] = instructions
+            d[title] = instruction
 
     return d
 
@@ -122,11 +117,14 @@ def findRecipes(ingredientList):
     ingredientQuery = createIngredientQuery(ingredientList) #Create query 
     titleAndInstructionDict = getTitleAndInstructionsInDictionary(ingredientQuery) #Get result of query
 
-    allRecipeDict = getAllIngredientsAndInstructions("" + prefixRecipe +
+    allRecipeDict = getAllIngredientsAndInstructions("" + prefixFo + prefixEx +
         """SELECT DISTINCT ?title ?ingredient ?instruction WHERE
         {
-            ?title recipe:recipeIngredient ?ingredient .
-            ?title recipe:recipeInstructions ?instruction
+            ?title fo:instruction ?instruction .
+          
+            ?title fo:ingredients ?food .
+           
+            ?food fo:food ?ingredient .
         }    
     """)
 
@@ -141,24 +139,41 @@ def findRecipes(ingredientList):
     print(resultDict)
     return resultDict
 
+##
+# Create an insertion query based on title, ingredients and instructions 
 def createInsertRecipeQuery(title, ingredientList, instructions):
     newTitle = title.replace(' ', '_')
     exTitle = "ex:" + newTitle + " "
 
-    query = "" + prefixRecipe + " " + prefixRdf + " " + prefixEx + " INSERT DATA {"
-    query += exTitle + "rdf:type recipe:name . "
+    query = "" + prefixFo + " " + prefixRdf + " " + prefixEx + " INSERT DATA {"
+    query += exTitle + " rdf:type fo:Recipe . "
 
+    i = 0
     for ingredient in ingredientList:
-        query += exTitle + "recipe:recipeIngredient \"" + ingredient + "\" . "
-    
-    query += exTitle + "recipe:recipeInstructions \"" + instructions + "\" . }"
+        newIngredient = ingredient[0].replace(' ', '_')
+
+        query += "ex:" + newIngredient + " rdf:type fo:Food ."
+
+        query += exTitle + "fo:ingredients _:i" + str(i) + " ."
+
+        query += " _:i" + str(i) + " fo:food ex:" + newIngredient + " ."
+        query += " _:i" + str(i) + " fo:quantity " + str(ingredient[1]) + " ."
+
+        if len(ingredient) == 3:
+            query += " _:i" + str(i) + " fo:imperial_quantity \"" + ingredient[2] + "\" ."
+
+        query += " _:i" + str(i) + " rdf:type fo:Ingredient ."
+        
+        i = i + 1
+
+    query += exTitle + "fo:instruction \"" + instructions + "\" . }"
     
     print(query)
     return query
 
 
 ##
-# Insert recipe 
+# Insert the recipe into the graph 
 def insertRecipe(query):
     sparql.setMethod(POST)
     sparql.setQuery(query)

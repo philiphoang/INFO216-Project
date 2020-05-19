@@ -7,6 +7,20 @@ app = Flask(__name__, template_folder='templates')
 def index():
     return render_template('index.html')
 
+@app.route("/add_recipe", methods=["GET", "POST"])
+def add_recipe():
+    return render_template("add_recipe.html")
+    
+@app.route("/index.html", methods=["GET", "POST"])
+def home():
+    return render_template("index.html")
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+##
+# Function that listen to page index.html 
+# The page takes the user input, creates a SELECT query, and shows the result
 @app.route("/", methods=["POST"])
 def getvalue():
     ingredientList = []
@@ -30,45 +44,44 @@ def getvalue():
 
     return render_template("recipes.html", recipes = recipes)
 
-
+##
+# Function that listen to page recipes.html 
+# It takes the user input, creates an INSERT query, and shows the result on a new page
 @app.route("/add_recipe", methods=["POST"])
 def addvalue():
     title = request.form["title"] 
 
     ingredientList = []
-    if ("ingredient1" in request.form):
-        ingredientList.append(request.form["ingredient1"])
+    foodList = []
+    addFieldIfNotEmpty("1", ingredientList, foodList)
+    addFieldIfNotEmpty("2", ingredientList, foodList)
+    addFieldIfNotEmpty("3", ingredientList, foodList)
+    addFieldIfNotEmpty("4", ingredientList, foodList)
+    addFieldIfNotEmpty("5", ingredientList, foodList)
 
-    if ("ingredient2" in request.form):
-        ingredientList.append(request.form["ingredient2"])
-    
-    if ("ingredient3" in request.form):
-        ingredientList.append(request.form["ingredient3"])
-    
-    if ("ingredient4" in request.form):
-        ingredientList.append(request.form["ingredient4"])
-    
-    if ("ingredient5" in request.form):
-        ingredientList.append(request.form["ingredient5"])
-    
     instructions = request.form["instructions"]
 
     query = createInsertRecipeQuery(title, ingredientList, instructions)
     insertRecipe(query)
 
-    recipes = findRecipes(ingredientList)
+    recipes = findRecipes(foodList)
 
     return render_template("recipes.html", recipes = recipes)
 
+##
+# Check if the fields are not empty
+# If not empty, read the user input 
+def addFieldIfNotEmpty(fieldnr, ingredientList, foodList):
+    if ("food"+str(fieldnr) in request.form):
+        ingredient1 = []
+        ingredient1.append(request.form["food"+str(fieldnr)])
+        foodList.append(request.form["food"+str(fieldnr)])
+        
+        if ("quantity"+str(fieldnr) in request.form):
+            ingredient1.append(request.form["quantity"+str(fieldnr)])
 
-@app.route("/add_recipe", methods=["GET", "POST"])
-def add_recipe():
-    return render_template("add_recipe.html")
+            if ("unit"+str(fieldnr) in request.form):
+                ingredient1.append(request.form["unit"+str(fieldnr)])
 
-    
-@app.route("/index.html", methods=["GET", "POST"])
-def home():
-    return render_template("index.html")
+        ingredientList.append(ingredient1)
 
-if __name__ == '__main__':
-    app.run(debug=True)

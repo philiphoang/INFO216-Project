@@ -37,3 +37,7 @@ nav a.active {
 ol {
   list-style: none;
 }
+
+input {
+  margin-left: 5px;
+}

@@ -16,7 +16,10 @@
             <input type="text" name="title">
             <br><br>
             <div id="dynamicInput">
-                Ingredient 1 ("amount" "unit (optional)" "ingredient")<br><input type="text" name="ingredient1">
+                Ingredient 1 (Food | Quantity | Unit (Optional))<br>
+                <input type="text" name="food1">
+                <input type="text" name="quantity1">
+                <input type="text" name="unit1">
             </div>
            
             <input type="button" value="Add another ingredient" onClick="addIngredientField('dynamicInput');"><br><br>
@@ -28,7 +31,6 @@
         </form>
     </body>
 
-
     <script>
         var counter = 1;
         var limit = 5;
@@ -38,7 +40,10 @@
             }
             else {
                 var newdiv = document.createElement('div');
-                newdiv.innerHTML = "Ingredient " + (counter + 1) + " <br><input type='text' name='ingredient" + (counter + 1) + "'>";
+                newdiv.innerHTML = "Ingredient " + (counter + 1) + " <br>";
+                newdiv.innerHTML += "<input type='text' name='food" + (counter + 1) + "'>";
+                newdiv.innerHTML += "<input type='text' name='quantity" + (counter + 1) + "'>";
+                newdiv.innerHTML += "<input type='text' name='unit" + (counter + 1) + "'>";
                 document.getElementById(divName).appendChild(newdiv);
                 counter++;
             }
