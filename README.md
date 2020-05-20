@@ -22,7 +22,8 @@ To run the program (local):
 ```python csv_to_rdf.py```
 
 
-4. Put recipe_triples.txt into Blazegraph in the UPDATE tab through localhost (default is localhost:9999)
+4. Put recipe_triples.txt into Blazegraph in the UPDATE tab through localhost (default is localhost:9999)  
+Make sure to choose Type: RDF Data and Format: Turtle
 
 
 5. Run app.py and click on the address for the server (or copy the address to a webbrowser)
