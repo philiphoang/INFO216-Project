@@ -1,4 +1,4 @@
-from query_functions import createIngredientQuery, getRecipeTitle, getTitleAndInstructions, getAllIngredientsAndInstructions, findRecipes, getTitleAndInstructionsInDictionary, insertRecipe, createInsertRecipeQuery
+from query_functions import createIngredientQuery, getRecipeTitle, getTitleAndInstructions, getAllInformationOfARecipe, findRecipes, getTitleAndInstructionsInDictionary, insertRecipe, createInsertRecipeQuery
 
 #Prefixes 
 prefixFo = "PREFIX fo: <https://bbc.co.uk/ontologies/fo/>"
@@ -15,8 +15,6 @@ getRecipeTitle("" + prefixFo + prefixEx +
                 
     }
 """)
-
-
 
 # #SELECT recipe titles based on three ingredients (example: beef AND tomato)
 getRecipeTitle("" + prefixFo + " " + prefixEx + 
@@ -39,8 +37,7 @@ getRecipeTitle("" + prefixFo + " " + prefixEx +
     
 """)
 
-
-## USING FUNCTIONS FOR CREATING QUERIES
+## USING FUNCTIONS TO CREATE QUERIES
 
 #Create query for getting titles for a set of ingredients 
 ingrediensquery = createIngredientQuery(["cheese", "salt"])
@@ -52,13 +49,3 @@ result = getTitleAndInstructions(titleAndInstructionsQuery)
 
 #Find recipes with matching ingredients
 findRecipes(["salt", "butter", "flour"])
-
-#Insert new recipes 
-title = "Basic_Pizza"
-ingredientList = [["Pizza dough", 1], ["Tomato sauce", 1, "glass"], ["grated cheese", 100, "gram"]]
-instruction = "Roll out pizza dough. Spread chopped tomatoes. Put cheese on top. Put pizza in oven for 15 min with 200 degree celsius."
-query = createInsertRecipeQuery(title, ingredientList, instruction)
-insertRecipe(query)
-
-#Search for the new recipe containing glass
-findRecipes(["Pizza_Dough"])

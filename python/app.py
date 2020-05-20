@@ -7,17 +7,6 @@ app = Flask(__name__, template_folder='templates')
 def index():
     return render_template('index.html')
 
-@app.route("/add_recipe", methods=["GET", "POST"])
-def add_recipe():
-    return render_template("add_recipe.html")
-    
-@app.route("/index.html", methods=["GET", "POST"])
-def home():
-    return render_template("index.html")
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
 ##
 # Function that listen to page index.html 
 # The page takes the user input, creates a SELECT query, and shows the result
@@ -85,3 +74,16 @@ def addFieldIfNotEmpty(fieldnr, ingredientList, foodList):
 
         ingredientList.append(ingredient1)
 
+
+@app.route("/add_recipe", methods=["GET", "POST"])
+def add_recipe():
+    return render_template("add_recipe.html")
+
+    
+@app.route("/index.html", methods=["GET", "POST"])
+def home():
+    return render_template("index.html")
+    
+
+if __name__ == '__main__':
+    app.run(debug=True)

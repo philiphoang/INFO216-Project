@@ -13,12 +13,12 @@
             <ol>
                 <h3>{{title}}</h3>
                 <b>Ingredients:</b>
-                {% for i in recipes[title] %}
+                {% for ingredient in recipes[title] %}
                     {%if not loop.last %}
-                    <li id="ingredient">{{i}}</li>
+                    <li id="ingredient">{{ingredient[1]}} {{ingredient[2]}} {{ingredient[0]}} </li>
                     {% else %}
                     <br>
-                    <b>Instructions:</b> <li id="instruction">{{i}}</li>
+                    <b>Instructions:</b> <li id="instruction">{{ingredient[3]}} </li>
                     {% endif %}
                 {% endfor %}
             </ol>    

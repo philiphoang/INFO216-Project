@@ -9,8 +9,138 @@ prefixRdf = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
 ## Connection to Blazegraph
 sparql = SPARQLWrapper("http://localhost:9999/blazegraph/sparql")
 
+# Create a string for filtering for an ingredient 
+#
+# Returns a query string 
+def addIngredientToQuery(i, ingredient):
+    newIngredient = ingredient.replace(' ', '_')
+    return "?title fo:ingredients ?ingredient" + i + " BIND (ex:" + newIngredient + " as ?i" + i + ") ?ingredient" + i + " fo:food ?i" + i + " ."
+    
+
+##
+# Send the query to sparql and convert the result to JSON format
+#
+# Returns the result of a query
+def parseQuery(query):
+    print()
+    sparql.setQuery(query)
+
+    sparql.setReturnFormat(JSON)
+    return sparql.query().convert()
+
+##
+# Collect the recipe titles from the query result
+#
+# Returns a list containing the recipe titles
+def getRecipeTitle(query):
+    results = parseQuery(query)
+
+    resultList = []
+    for result in results["results"]["bindings"]:
+        resultList.append(result["title"]["value"])
+        print(result["title"]["value"])
+
+    return resultList
+
+##
+# Get recipe titles with instructions 
+#
+# Returns title and instructions on list
+def getTitleAndInstructions(query):
+    results = parseQuery(query)
+
+    titleList = []
+    instructionList = []
+    for result in results["results"]["bindings"]:
+        titleList.append(result["title"]["value"])
+        print(result["title"]["value"])
+        instructionList.append(result["instruction"]["value"])
+        print(result["instruction"]["value"])
+
+    return titleList, instructionList
+
+##
+# Get a dictionary containing title and instructions
+#
+# Returns the results in a dictionary 
+def getTitleAndInstructionsInDictionary(query):
+    results = parseQuery(query)
+
+    d = {}
+    for result in results["results"]["bindings"]:
+        title = result["title"]["value"]
+        instruction = result["instruction"]["value"]
+
+        if (title not in d.keys()):
+            d[title] = instruction
+
+    return d
+
+
+##
+# Get all ingredients and instructions
+#
+# Returns a dictionary containing all information of a recipe
+def getAllInformationOfARecipe(query):
+    results = parseQuery(query)
+
+    recipeDict = {}
+    for result in results["results"]["bindings"]:
+        title = result["title"]["value"]
+        food = result["food"]["value"]
+        instruction = result["instruction"]["value"]
+        quantity = result["quantity"]["value"]
+        unit = result["unit"]["value"]
+
+        ingredient = []
+        if (title not in recipeDict): 
+            recipeDict[title] = ingredient
+
+        recipeDict.get(title).append([food, quantity, unit, instruction])
+
+        print(instruction)
+
+    return recipeDict
+
+##
+# Match the chosen ingredients with all recipes to get all ingredients
+# Creates two query:
+# 1. one for finding the recipes that matches the ingredients
+# 2. second for finding all the recipes with all their ingredients 
+# Combines the result by adding all the ingredients to the recipes that has the matching ingredients 
+#
+# Returns a dictionary containing all information of a recipe, but returns only the recipes that has the matching ingredients of the given input
+def findRecipes(ingredientList):
+    ingredientQuery = createIngredientQuery(ingredientList) #Create query 
+    titleAndInstructionDict = getTitleAndInstructionsInDictionary(ingredientQuery) #Get result of query
+
+    allRecipeDict = getAllInformationOfARecipe("" + prefixFo + prefixEx +
+        """SELECT DISTINCT ?title ?quantity ?unit ?food ?instruction WHERE
+        {
+            ?title fo:instruction ?instruction .
+          
+            ?title fo:ingredients ?ingredient .
+           
+            ?ingredient fo:food ?food .
+          
+          	?ingredient fo:quantity ?quantity .
+          
+          	?ingredient fo:imperial_quantity ?unit
+        }  
+    """)
+
+    resultDict = {}
+
+    for title in allRecipeDict.keys():
+        if (title in titleAndInstructionDict):
+            resultDict[title] = allRecipeDict[title]
+
+    return resultDict
+
 ##
 # Function for creating queries for a set of ingredients
+# 
+# Returns a query string 
 def createIngredientQuery(ingredientList):
     queryString = "" + prefixEx + " " + prefixFo + " SELECT DISTINCT ?title ?instruction" 
     
@@ -29,118 +159,9 @@ def createIngredientQuery(ingredientList):
     return queryString
 
 ##
-# Create a string for filtering for an ingredient 
-def addIngredientToQuery(i, ingredient):
-    newIngredient = ingredient.replace(' ', '_')
-    return "?title fo:ingredients ?ingredient" + i + " BIND (ex:" + newIngredient + " as ?i" + i + ") ?ingredient" + i + " fo:food ?i" + i + " ."
-    
-
-##
-# Send the query to sparql and convert it to JSON format
-def parseQuery(query):
-    print()
-    sparql.setQuery(query)
-
-    sparql.setReturnFormat(JSON)
-    return sparql.query().convert()
-
-##
-# Collect the recipe titles from the query result
-def getRecipeTitle(query):
-    results = parseQuery(query)
-
-    print(results)
-
-    resultList = []
-    for result in results["results"]["bindings"]:
-        resultList.append(result["title"]["value"])
-        print(result["title"]["value"])
-
-    return resultList
-
-##
-# Get recipe titles with instructions 
-def getTitleAndInstructions(query):
-    results = parseQuery(query)
-
-    print(results)
-
-    titleList = []
-    instructionList = []
-    for result in results["results"]["bindings"]:
-        titleList.append(result["title"]["value"])
-        print(result["title"]["value"])
-        instructionList.append(result["instruction"]["value"])
-        print(result["instruction"]["value"])
-
-    return titleList, instructionList
-
-##
-# Get a dictionary containing title and instructions
-def getTitleAndInstructionsInDictionary(query):
-    results = parseQuery(query)
-
-    print(results)
-
-    d = {}
-    for result in results["results"]["bindings"]:
-        title = result["title"]["value"]
-        instruction = result["instruction"]["value"]
-
-        if (title not in d.keys()):
-            d[title] = instruction
-
-    return d
-
-
-##
-# Get all ingredients and instructions
-def getAllIngredientsAndInstructions(query):
-    results = parseQuery(query)
-
-    recipeDict = {}
-    for result in results["results"]["bindings"]:
-        title = result["title"]["value"]
-        ingredient = result["ingredient"]["value"]
-        instruction = result["instruction"]["value"]
-
-        if (title not in recipeDict):
-            recipeDict[title] = []
-        
-        recipeDict.get(title).append(ingredient)
-            
-    return recipeDict
-
-##
-# Match the chosen ingredients with all recipes to get all ingredients
-def findRecipes(ingredientList):
-    ingredientQuery = createIngredientQuery(ingredientList) #Create query 
-    titleAndInstructionDict = getTitleAndInstructionsInDictionary(ingredientQuery) #Get result of query
-
-    allRecipeDict = getAllIngredientsAndInstructions("" + prefixFo + prefixEx +
-        """SELECT DISTINCT ?title ?ingredient ?instruction WHERE
-        {
-            ?title fo:instruction ?instruction .
-          
-            ?title fo:ingredients ?food .
-           
-            ?food fo:food ?ingredient .
-        }    
-    """)
-
-    resultDict = {}
-
-    for title in allRecipeDict.keys():
-        if (title in titleAndInstructionDict):
-            resultDict[title] = allRecipeDict[title]
-
-            resultDict.get(title).insert(len(resultDict.get(title)),  titleAndInstructionDict[title])
-
-    print(resultDict)
-    return resultDict
-
-##
 # Create an insertion query based on title, ingredients and instructions 
+# 
+# Returns a query string for insertion
 def createInsertRecipeQuery(title, ingredientList, instructions):
     newTitle = title.replace(' ', '_')
     exTitle = "ex:" + newTitle + " "
@@ -168,7 +189,7 @@ def createInsertRecipeQuery(title, ingredientList, instructions):
 
     query += exTitle + "fo:instruction \"" + instructions + "\" . }"
     
-    print(query)
+    # print(query)
     return query
 
 
@@ -180,3 +201,4 @@ def insertRecipe(query):
 
     results = sparql.query()
     print(results.response.read())
+
