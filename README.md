@@ -1,4 +1,4 @@
-# INFO216-Project Website for finding Food Recipes
+# Website for finding Food Recipes
 
 Recipe Dataset: https://github.com/cweber/cookbook/blob/master/recipes.csv  
 BBC Food Ontology: https://www.bbc.co.uk/ontologies/fo  
